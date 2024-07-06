@@ -5,6 +5,8 @@
     "version": "1.0",
     "permissions": [], 
     "icons": {
+      "128": "icon-128.png",
+      "50": "icon-50.png"
     },
     "content_scripts": [
         {
