@@ -42,8 +42,8 @@ function injectButtons() {
   const extensionToolbar = `
     <div class='cbt-toolbar'>
       <a role='button' id='cbt-allButton' class='cbt-button cbt-active'>All</a>
-      <a role='button' id='cbt-termOneButton' class='cbt-button'>Winter Term 1</a>
-      <a role='button' id='cbt-termTwoButton' class='cbt-button'>Winter Term 2</a>
+      <a role='button' id='cbt-termOneButton' class='cbt-button'>Term 1</a>
+      <a role='button' id='cbt-termTwoButton' class='cbt-button'>Term 2</a>
     </div>
   `;
   
