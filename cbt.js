@@ -3,6 +3,8 @@ let findCalendarPageCount = 0;
 
 let listenForCalendarInterval = null;
 
+let calendarOpen = false;
+
 let courseData = null;
 
 function findCalendarPage() {
@@ -19,13 +21,19 @@ function findCalendarPage() {
 }
 
 function listenForCalendar() {
-  const bodyText = document.body.innerText;
-  const regex = /View as Course Calendar/;
-  if (bodyText.match(regex) != null) {
+  const bodyText = document.body.innerHTML;
+  const regex = />View as Course Calendar</;
+  const textMatched = bodyText.match(regex) != null
+  if (textMatched && !calendarOpen) {
+    calendarOpen = true;
     console.log("Calendar opened");
     injectButtons();
     parseCourseData();
-    clearInterval(listenForCalendarInterval);
+  } else if (!textMatched && calendarOpen) {
+    console.log("Calendar closed");
+    calendarOpen = false;
+  } else if (!textMatched) {
+    console.log("Not text matched")
   }
 }
 
@@ -33,7 +41,7 @@ function injectButtons() {
   const calendarToolbar = document.querySelector("[data-automation-id='calendarToolbar']")
   const extensionToolbar = `
     <div class='cbt-toolbar'>
-      <a role='button' id='cbt-allButton' class='cbt-button'>All</a>
+      <a role='button' id='cbt-allButton' class='cbt-button cbt-active'>All</a>
       <a role='button' id='cbt-termOneButton' class='cbt-button'>Winter Term 1</a>
       <a role='button' id='cbt-termTwoButton' class='cbt-button'>Winter Term 2</a>
     </div>
@@ -48,12 +56,21 @@ function injectButtons() {
     const termTwoButton = document.getElementById("cbt-termTwoButton");
     allButton.addEventListener("click", function() {
       resetAll();
+      allButton.classList.add("cbt-active");
+      termOneButton.classList.remove("cbt-active");
+      termTwoButton.classList.remove("cbt-active");
     });
     termOneButton.addEventListener("click", function() {
       chooseTermOne();
+      termOneButton.classList.add("cbt-active");
+      allButton.classList.remove("cbt-active");
+      termTwoButton.classList.remove("cbt-active");
     });
     termTwoButton.addEventListener("click", function() {
       chooseTermTwo();
+      termTwoButton.classList.add("cbt-active");
+      allButton.classList.remove("cbt-active");
+      termOneButton.classList.remove("cbt-active");
     });
   }
 }

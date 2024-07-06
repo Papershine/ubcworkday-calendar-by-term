@@ -4,10 +4,20 @@
 }
 
 .cbt-button {
-  border: 1px solid grey;
+  border: 1px solid black;
+  color: black;
   border-radius: 1em;
   padding: 4px 2em;
   cursor: pointer;
+  transition: background-color 0.25s ease-in-out;
+}
+
+.cbt-button:hover {
+  background-color: lightgrey;
+}
+
+.cbt-active {
+  background-color: lightgrey;
 }
 
 .cbt-hidden {
