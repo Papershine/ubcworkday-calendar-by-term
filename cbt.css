@@ -1,0 +1,23 @@
+.cbt-toolbar {
+  display: flex;
+  gap: 1em;
+}
+
+.cbt-button {
+  border: 1px solid grey;
+  border-radius: 1em;
+  padding: 4px 2em;
+  cursor: pointer;
+}
+
+.cbt-hidden {
+  visibility: hidden;
+}
+
+.cbt-forceFullWidth {
+  width: 14.2857% !important;
+}
+
+.cbt-forcePosition {
+  transform: translateX(-50%) !important;
+}

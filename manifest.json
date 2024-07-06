@@ -1,0 +1,16 @@
+{
+    "manifest_version": 3,
+    "name": "UBC Workday Calendar by Term",
+    "description": "",
+    "version": "1.0",
+    "permissions": [], 
+    "icons": {
+    },
+    "content_scripts": [
+        {
+          "js": ["cbt.js"],
+          "css": ["cbt.css"],
+          "matches": ["https://wd10.myworkday.com/*"]
+        }
+    ]
+}
