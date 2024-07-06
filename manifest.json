@@ -12,7 +12,7 @@
         {
           "js": ["cbt.js"],
           "css": ["cbt.css"],
-          "matches": ["https://wd10.myworkday.com/*"]
+          "matches": ["https://wd10.myworkday.com/ubc/d/task/*"]
         }
     ]
 }
