@@ -9,7 +9,9 @@ Extension built with JavaScript and CSS.
 
 ## Installation
 
-To install this project, clone the repository, then load the unpacked extension onto Chrome through the manage extensions
+Install directly from the Chrome Extension store at https://chromewebstore.google.com/detail/ubc-workday-calendar-by-t/hndfdmodlnjnpkihhmjaldminehkphbm
+
+To install this project manually, clone the repository, then load the unpacked extension onto Chrome through the manage extensions
 settings interface. This option is only enabled when developer mode has been turned on in the Chrome extension settings.
 
 ## Issues & Requests
