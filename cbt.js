@@ -13,7 +13,7 @@ let courseData = null;
 // detect if the user is on the page that shows the calendar
 function findCalendarPage() {
   const bodyText = document.body.innerText;
-  const regex = /View My Courses/;
+  const regex = /(View My Courses|View as Course Calendar)/;
   if (bodyText.match(regex) != null) {
     listenForCalendarInterval = setInterval(listenForCalendar, 2000);
     clearInterval(findCalendarPageInterval);
