@@ -1,33 +1,23 @@
-// an interval and counter for detecting if the user is on the page that shows the calendar
 let findCalendarPageInterval = setInterval(findCalendarPage, 2000);
-let findCalendarPageCount = 0;
 
-// a interval that detects whether the user has opened the calendar or not
 let listenForCalendarInterval = null;
 
 let calendarOpen = false;
 
-// the courses that the user is registered in, loaded dynamically
 let courseData = null;
 
-// detect if the user is on the page that shows the calendar
 function findCalendarPage() {
   const bodyText = document.body.innerText;
   const regex = /(View My Courses|View as Course Calendar)/;
   if (bodyText.match(regex) != null) {
-    listenForCalendarInterval = setInterval(listenForCalendar, 2000);
+    listenForCalendarInterval = setInterval(listenForCalendar, 1000);
     clearInterval(findCalendarPageInterval);
   }
-  if (findCalendarPageCount >= 100) {
-    clearInterval(findCalendarPageInterval); // stop after a while
-  }
-  findCalendarPageCount++;
 }
 
-// detect if the calendar is opened
 function listenForCalendar() {
   const bodyText = document.body.innerHTML;
-  const regex = />View as Course Calendar</; // angle brackets because text on its own is in the html when calendar not open
+  const regex = />View as Course Calendar</;
   const textMatched = bodyText.match(regex) != null
   if (textMatched && !calendarOpen) {
     calendarOpen = true;
@@ -75,9 +65,7 @@ function injectButtons() {
   }
 }
 
-// reset calendar back to workday default
 function resetAll() {
-  console.log("resetAll");
   getAllCalendarCourses().forEach((elm) => {
     elm.classList.remove("cbt-hidden");
     elm.parentElement.parentElement.classList.remove("cbt-forceFullWidth");
@@ -90,7 +78,7 @@ function chooseTermOne() {
   getAllCalendarCourses().forEach((elm) => {
     const sectionTitle = elm.innerText.split("\n")[0];
     const sectionData = findSection(sectionTitle);
-    if (!(sectionData.startMonth === 9 || sectionData.startMonth === 5)) { // if the course doesnt start on January or May, hide it
+    if (!(sectionData.startMonth === 9 || sectionData.startMonth === 5)) {
       elm.classList.add("cbt-hidden");
     } else {
       elm.parentElement.parentElement.classList.add("cbt-forceFullWidth");
@@ -106,7 +94,7 @@ function chooseTermTwo() {
   getAllCalendarCourses().forEach((elm) => {
     const sectionTitle = elm.innerText.split("\n")[0];
     const sectionData = findSection(sectionTitle);
-    if (!(sectionData.endMonth === 4 || sectionData.endMonth === 8)) { // if the course doesnt end on August or April, hide it
+    if (!(sectionData.endMonth === 4 || sectionData.endMonth === 8)) {
       elm.classList.add("cbt-hidden");
     } else {
       elm.parentElement.parentElement.classList.add("cbt-forceFullWidth");
@@ -118,7 +106,7 @@ function chooseTermTwo() {
 }
 
 function getAllCalendarCourses() {
-  return document.querySelectorAll(".WLSC.WMSC.WMUC.WMVC"); // workday puts these classes for courses in the calendar
+  return document.querySelectorAll(".WJSC.WKSC.WKTC.WJUC");
 }
 
 function findSection(section) {
@@ -126,13 +114,11 @@ function findSection(section) {
   return found[0];
 }
 
-// some elements are offset if the course times overlap across terms, detect them here and use the forcePosition css class
 function isCourseElementOffset(elm) {
   const conditions = ["7.", "21.", "35.", "50", "64.", "78.", "92."];
   return conditions.some((cond) => elm.parentElement.parentElement.style.left.startsWith(cond));
 }
 
-// fetch user course data from the html table
 function parseCourseData() {
   const courseTables = document.querySelectorAll("[data-automation-id='table']");
   let courses = []
@@ -142,11 +128,10 @@ function parseCourseData() {
   courseData = transformCourseJson(courses);
 }
 
-// only extract needed course info from the full json
 function transformCourseJson(cousesJson) {
   const transformedCourses = cousesJson.map((course) => {
     let newCourseObj = {
-      section: course.section.split(" - ")[0], // remove unneccessary info
+      section: course.section.split(" - ")[0],
       startMonth: new Date(Date.parse(course.startDate)).getMonth() + 1, // January is 1 here
       endMonth: new Date(Date.parse(course.endDate)).getMonth() + 1
     };
@@ -155,15 +140,17 @@ function transformCourseJson(cousesJson) {
   return transformedCourses;
 }
 
-// convert the html table to json format for data access
 function tableToJson(table) {
   var data = [];
-  var headers = ["searchbar", "title", "credits", "grading", "section", "format", "delivery", "pattern", "status", "instructor", "startDate", "endDate"];
   for (var i=2; i<table.rows.length; i++) {
       var tableRow = table.rows[i];
-      var rowData = {};
-      for (var j=0; j<tableRow.cells.length; j++) {
-          rowData[ headers[j] ] = tableRow.cells[j].innerText;
+      var rowData = {
+        section: tableRow.cells[5]?.innerText,
+        startDate: tableRow.cells[11]?.innerText,
+        endDate: tableRow.cells[12]?.innerText
+      };
+      if (!(rowData.section && rowData.startDate && rowData.endDate)) {
+        continue;
       }
       data.push(rowData);
   }
